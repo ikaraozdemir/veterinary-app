@@ -20,13 +20,16 @@ public class Animal {
     private String breed;
     private LocalDate dateOfBirth;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Customer customer;
 
-    @OneToMany(mappedBy = "animal", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "animal", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Appointment> appointments;
+
+    @OneToMany(mappedBy = "animal", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Vaccine> vaccines;
 
 
 }

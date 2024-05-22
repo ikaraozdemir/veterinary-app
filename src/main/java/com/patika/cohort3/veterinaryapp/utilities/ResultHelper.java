@@ -29,12 +29,16 @@ public class ResultHelper {
         return new Result(false, msg,"500");
     }
 
-//    public static <T> ResultData<CursorResponse<T>> cursor(Page<T> pageData) {
-//        CursorResponse<T> cursor = new CursorResponse<>();
-//        cursor.setItems(pageData.getContent());
-//        cursor.setPageNumber(pageData.getNumber());
-//        cursor.setPageSize(pageData.getSize());
-//        cursor.setTotalElements(pageData.getTotalElements());
-//        return ResultHelper.success(cursor);
-//    }
+    public static Result notAvailableError(String msg) {
+        return new Result(false, msg, "400");
+    }
+
+    public static Result cannotDeleteError(String msg) {
+        return new Result(false, msg, "409");
+    }
+
+    public static Result dateFormatError() {
+        return new Result(false,Message.DATE_FORMAT_ERROR,"400");
+    }
+
 }

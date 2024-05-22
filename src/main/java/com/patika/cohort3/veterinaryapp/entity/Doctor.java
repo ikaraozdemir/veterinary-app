@@ -18,10 +18,10 @@ public class Doctor {
     private String address;
     private String city;
 
-    @OneToMany (mappedBy = "doctor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany (mappedBy = "doctor", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<AvailableDate> availableDates;
 
-    @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
     private List<Appointment> appointments;
 
 }

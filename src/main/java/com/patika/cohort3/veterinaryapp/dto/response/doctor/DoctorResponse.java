@@ -9,6 +9,6 @@ public class DoctorResponse {
     private String name;
     private String mpNo;
     private String mail;
-    private List<DoctorAppointmentResponse> appointments;
-    private List<DoctorAvailableDateResponse> availableDates;
+//    private List<AppointmentDoctorResponse> appointments;
+//    private List<AvailableDateDoctorResponse> availableDates;
 }

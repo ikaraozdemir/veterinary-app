@@ -52,6 +52,14 @@ public class DoctorController {
         return ResultHelper.success(responses);
     }
 
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<DoctorResponse> findById(@PathVariable Long id) {
+        Doctor doctor = this.doctorService.getById(id);
+        DoctorResponse response = DoctorMapper.INSTANCE.mapToResponse(doctor);
+        return ResultHelper.success(response);
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Result delete (@PathVariable("id") Long id) {

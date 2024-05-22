@@ -11,5 +11,5 @@ public interface AvailableDateService {
     public boolean delete(Long id);
     public AvailableDate getById(Long id);
     public List<AvailableDate> findAll();
-    public AvailableDate findByName(String name);
+
 }

@@ -6,6 +6,7 @@ import com.patika.cohort3.veterinaryapp.exception.NotFoundException;
 import com.patika.cohort3.veterinaryapp.repository.CustomerRepository;
 import com.patika.cohort3.veterinaryapp.service.abstracts.CustomerService;
 import com.patika.cohort3.veterinaryapp.utilities.Message;
+import com.patika.cohort3.veterinaryapp.utilities.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -20,12 +21,14 @@ public class CustomerServiceImp implements CustomerService {
 
     @Override
     public Customer save(Customer customer) {
-        Optional<Customer> optionalCustomer =this.customerRepository.findByMail(customer.getMail());
-        customer.setMpNo(customer.getMpNo().trim());
+        customer.setMail(customer.getMail().toLowerCase().trim());
+        Optional<Customer> optionalCustomer = this.customerRepository.findByMail(customer.getMail());
         if (optionalCustomer.isPresent()) {
             throw new AlreadyExistsException("Customer already exists.");
         }
         try {
+            customer.setMpNo(StringUtils.removeSpaces(customer.getMpNo()));
+            customer.setName(StringUtils.normalizeSpaces(customer.getName()));
             return customerRepository.save(customer);
         } catch (DataIntegrityViolationException e) {
             String errorMessage = e.getRootCause().getMessage();
@@ -34,14 +37,27 @@ public class CustomerServiceImp implements CustomerService {
             }
             throw e;
         }
-
     }
 
     @Override
     public Customer update(Customer customer) {
         this.getById(customer.getId());
-//        Optional<Customer> optionalCustomer = this.customerRepository.findByMail(customer.getMail());
-        return this.customerRepository.save(customer);
+        customer.setMail(customer.getMail().toLowerCase().trim());
+        Optional<Customer> optionalCustomer = this.customerRepository.findByMail(customer.getMail());
+        if (optionalCustomer.isPresent()) {
+            throw new AlreadyExistsException("Customer already exists.");
+        }
+        try {
+            customer.setMpNo(StringUtils.removeSpaces(customer.getMpNo()));
+            customer.setName(StringUtils.normalizeSpaces(customer.getName()));
+            return customerRepository.save(customer);
+        } catch (DataIntegrityViolationException e) {
+            String errorMessage = e.getRootCause().getMessage();
+            if (errorMessage.contains("mp_no") && errorMessage.contains("already exists")) {
+                throw new DataIntegrityViolationException("This phone number is already in use. Please enter a different phone number.");
+            }
+            throw e;
+        }
     }
 
     @Override
@@ -53,7 +69,7 @@ public class CustomerServiceImp implements CustomerService {
 
     @Override
     public Customer getById(Long id) {
-        return this.customerRepository.findById(id).orElseThrow(() -> new NotFoundException(Message.NOT_FOUND));
+        return this.customerRepository.findById(id).orElseThrow(() -> new NotFoundException("No customer found with ID " + id));
     }
 
     @Override
@@ -63,6 +79,6 @@ public class CustomerServiceImp implements CustomerService {
 
     @Override
     public Customer findByName(String name) {
-        return this.customerRepository.findByName(name);
+        return this.customerRepository.findByName(name).orElseThrow(() -> new NotFoundException("No customer found with ID " + name));
     }
 }

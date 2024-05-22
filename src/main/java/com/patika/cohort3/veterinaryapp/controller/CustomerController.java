@@ -2,6 +2,7 @@ package com.patika.cohort3.veterinaryapp.controller;
 
 import com.patika.cohort3.veterinaryapp.dto.request.customer.CustomerSaveRequest;
 import com.patika.cohort3.veterinaryapp.dto.request.customer.CustomerUpdateRequest;
+import com.patika.cohort3.veterinaryapp.dto.response.customer.CustomerGetAnimalsResponse;
 import com.patika.cohort3.veterinaryapp.dto.response.customer.CustomerResponse;
 import com.patika.cohort3.veterinaryapp.dto.response.customer.CustomerSaveResponse;
 import com.patika.cohort3.veterinaryapp.entity.Customer;
@@ -49,12 +50,20 @@ public class CustomerController {
         return ResultHelper.success(customerResponse);
     }
 
-//    @GetMapping("/{customerId}/animals")
-//    public ResponseEntity<Animal> getAnimalByCustomerIdAndAnimalName(@PathVariable Long customerId, @RequestParam String animalName) {
-//        // Belirli bir müşteriye ait ve belirli bir isme sahip hayvanı getir
-//        Optional<Animal> optionalAnimal = customerRepository.findAnimalByNameAndCustomerId(animalName, customerId);
-//
+    @GetMapping("/customer/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<CustomerResponse> findByName(@PathVariable("id") Long id ) {
+        Customer customer = this.customerService.getById(id);
+        CustomerResponse customerResponse = CustomerMapper.INSTANCE.mapToResponse(customer);
+        return ResultHelper.success(customerResponse);
+    }
 
+    @GetMapping("/{id}/animals")
+        public ResultData<CustomerGetAnimalsResponse>  findAnimalsByCustomerId(@PathVariable("id") Long id) {
+        Customer customer = this.customerService.getById(id);
+        CustomerGetAnimalsResponse customerGetAnimalsResponse = CustomerMapper.INSTANCE.mapToGetAnimalResponse(customer);
+        return ResultHelper.success(customerGetAnimalsResponse);
+    }
 
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)

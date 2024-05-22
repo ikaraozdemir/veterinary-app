@@ -1,6 +1,5 @@
 package com.patika.cohort3.veterinaryapp.dto.request.available.date;
 
-import com.patika.cohort3.veterinaryapp.dto.response.doctor.DoctorAvailableDateResponse;
 import jakarta.persistence.Column;
 import lombok.Data;
 

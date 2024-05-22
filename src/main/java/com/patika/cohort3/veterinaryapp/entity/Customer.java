@@ -10,9 +10,7 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"mpNo"}, name = "uk_mpno")
-})
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"mpNo"}, name = "uk_mpno")})
 public class Customer {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)

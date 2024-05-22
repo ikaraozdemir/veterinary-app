@@ -1,11 +1,14 @@
 package com.patika.cohort3.veterinaryapp.service.concretes;
 
+import com.patika.cohort3.veterinaryapp.entity.Appointment;
 import com.patika.cohort3.veterinaryapp.entity.AvailableDate;
 import com.patika.cohort3.veterinaryapp.entity.Doctor;
 import com.patika.cohort3.veterinaryapp.exception.AlreadyExistsException;
+import com.patika.cohort3.veterinaryapp.exception.AppointmentExistsException;
 import com.patika.cohort3.veterinaryapp.exception.NotFoundException;
 import com.patika.cohort3.veterinaryapp.repository.AvailableDateRepository;
 import com.patika.cohort3.veterinaryapp.repository.DoctorRepository;
+import com.patika.cohort3.veterinaryapp.service.abstracts.AppointmentService;
 import com.patika.cohort3.veterinaryapp.service.abstracts.AvailableDateService;
 import com.patika.cohort3.veterinaryapp.service.abstracts.DoctorService;
 import com.patika.cohort3.veterinaryapp.utilities.Message;
@@ -19,15 +22,17 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AvailableDateServiceImp implements AvailableDateService {
     private final AvailableDateRepository availableDateRepository;
-    private final DoctorRepository doctorRepository;
+    private final DoctorService doctorService;
+    private final AppointmentService appointmentService;
 
     @Override
     public AvailableDate save(AvailableDate availableDate) {
-        Optional<AvailableDate> optionalAvailableDate = this.availableDateRepository.findAvailableDateByDateAndDoctorId(availableDate.getDate(), availableDate.getDoctor().getId());
+        Optional<AvailableDate> optionalAvailableDate = this.availableDateRepository.findAvailableDateByDateAndDoctorId(
+                availableDate.getDate(), availableDate.getDoctor().getId());
         if (optionalAvailableDate.isPresent()) {
             throw new AlreadyExistsException("The date for this doctor already exists.");
         }
-        Doctor doctor = this.doctorRepository.findById(availableDate.getDoctor().getId()).orElseThrow(() -> new NotFoundException(Message.NOT_FOUND));
+        Doctor doctor = this.doctorService.getById(availableDate.getDoctor().getId());
         availableDate.setDoctor(doctor);
         return availableDateRepository.save(availableDate);
     }
@@ -35,7 +40,12 @@ public class AvailableDateServiceImp implements AvailableDateService {
     @Override
     public AvailableDate update(AvailableDate availableDate) {
         this.getById(availableDate.getId());
-        Doctor doctor = this.doctorRepository.findById(availableDate.getDoctor().getId()).orElseThrow(() -> new NotFoundException(Message.NOT_FOUND));
+        Optional<AvailableDate> optionalAvailableDate = this.availableDateRepository.findAvailableDateByDateAndDoctorId(
+                availableDate.getDate(), availableDate.getDoctor().getId());
+        if (optionalAvailableDate.isPresent()) {
+            throw new AlreadyExistsException("The date for this doctor already exists.");
+        }
+        Doctor doctor = this.doctorService.getById(availableDate.getDoctor().getId());
         availableDate.setDoctor(doctor);
         return this.availableDateRepository.save(availableDate);
     }
@@ -43,13 +53,21 @@ public class AvailableDateServiceImp implements AvailableDateService {
     @Override
     public boolean delete(Long id) {
         AvailableDate availableDate = this.getById(id);
+
+        List<Appointment> appointments = this.appointmentService.getByDoctorId(availableDate.getDoctor().getId());
+        for(Appointment appointment :appointments) {
+            if(appointment.getAppointmentDate().toLocalDate().isEqual(availableDate.getDate())){
+                throw new AppointmentExistsException("Available date with ID " + id + " cannot be deleted because there are existing appointments.");
+            }
+        }
+
         this.availableDateRepository.delete(availableDate);
         return true;
     }
 
     @Override
     public AvailableDate getById(Long id) {
-        return this.availableDateRepository.findById(id).orElseThrow(() -> new NotFoundException(Message.NOT_FOUND));
+        return this.availableDateRepository.findById(id).orElseThrow(() -> new NotFoundException("No available date found with ID " + id));
     }
 
     @Override
@@ -57,8 +75,4 @@ public class AvailableDateServiceImp implements AvailableDateService {
         return this.availableDateRepository.findAll();
     }
 
-    @Override
-    public AvailableDate findByName(String name) {
-        return null;
-    }
 }

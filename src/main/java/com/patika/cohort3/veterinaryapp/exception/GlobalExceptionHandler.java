@@ -1,18 +1,15 @@
 package com.patika.cohort3.veterinaryapp.exception;
 
 import com.patika.cohort3.veterinaryapp.result.Result;
-import com.patika.cohort3.veterinaryapp.result.ResultData;
 import com.patika.cohort3.veterinaryapp.utilities.ResultHelper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.time.DateTimeException;
+import java.time.format.DateTimeParseException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -23,41 +20,33 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({AlreadyExistsException.class})
-    public ResponseEntity<Result> handleCategoryAlreadyExistsException(AlreadyExistsException e) {
-
+    public ResponseEntity<Result> handleAlreadyExistsException(AlreadyExistsException e) {
         return new ResponseEntity<>(ResultHelper.alreadyExist(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-//        @ExceptionHandler({PublisherAlreadyExistsException.class})
-//        public ResponseEntity<Result> handlePublisherAlreadyExistsException(PublisherAlreadyExistsException e) {
-//
-//            return new ResponseEntity<>(ResultHelper.alreadyExist(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//
-//        @ExceptionHandler({BookAlreadyExistsException.class})
-//        public ResponseEntity<Result> handleBookAlreadyExistsException(BookAlreadyExistsException e) {
-//
-//            return new ResponseEntity<>(ResultHelper.alreadyExist(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//
-//        @ExceptionHandler({AuthorAlreadyExistsException.class})
-//        public ResponseEntity<Result> handleAuthorAlreadyExistsException(AuthorAlreadyExistsException e) {
-//
-//            return new ResponseEntity<>(ResultHelper.alreadyExist(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ResultData<List<String>>> handleValidationErrors(MethodArgumentNotValidException e) {
-        List<String> validationErrorList = e.getBindingResult().getFieldErrors().stream()
-                .map(FieldError::getDefaultMessage)
-                .collect(Collectors.toList());
-
-        return new ResponseEntity<>(ResultHelper.validateError(validationErrorList), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Result> handleDataIntegrityViolation(DataIntegrityViolationException e) {
         return new ResponseEntity<>(ResultHelper.validateError(e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DateTimeParseException.class)
+    public ResponseEntity<Result> handleGeneralDateTimeParseException(DateTimeParseException e) {
+        return new ResponseEntity<>(ResultHelper.dateFormatError(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DateValidationException.class)
+    public ResponseEntity<Result> handleProtectionEndDateNotArrivedException(DateValidationException e) {
+        return new ResponseEntity<>(ResultHelper.validateError(e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DoctorNotAvailableException.class)
+    public ResponseEntity<Result> handleDoctorNotAvailableException(DoctorNotAvailableException e) {
+        return new ResponseEntity<>(ResultHelper.notAvailableError(e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AppointmentExistsException.class)
+    public ResponseEntity<Result> handleAppointmentExistsException(AppointmentExistsException e) {
+        return new ResponseEntity<>(ResultHelper.cannotDeleteError(e.getMessage()), HttpStatus.CONFLICT);
     }
 
 }

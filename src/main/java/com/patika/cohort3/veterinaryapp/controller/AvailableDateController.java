@@ -59,9 +59,14 @@ public class AvailableDateController {
         List<AvailableDate> availableDates = this.availableDateService.findAll();
         List<AvailableDateResponse> responses = AvailableDateMapper.INSTANCE.mapToResponse(availableDates);
         return ResultHelper.success(responses);
-
     }
 
-
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<AvailableDateResponse> findById(@PathVariable("id") Long id) {
+        AvailableDate availableDate = this.availableDateService.getById(id);
+        AvailableDateResponse response = AvailableDateMapper.INSTANCE.mapToResponse(availableDate);
+        return ResultHelper.success(response);
+    }
 
 }
