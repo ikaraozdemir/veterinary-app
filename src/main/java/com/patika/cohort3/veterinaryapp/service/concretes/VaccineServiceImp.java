@@ -70,7 +70,7 @@ public class VaccineServiceImp implements VaccineService {
         //Check if the animal received multiple doses of the updated vaccine
         List<Vaccine> vaccines = vaccineRepository.findVaccineByNameAndAnimalId(normalizedName, vaccine.getAnimal().getId());
          for (Vaccine vaccineFromDB : vaccines) {
-                if (!Objects.equals(trimmedCode, vaccineFromDB.getCode()) && !Objects.equals(vaccine.getId(), vaccineFromDB.getId())) {
+                if (!Objects.equals(trimmedCode, vaccineFromDB.getCode()) && vaccine.getId().equals(vaccineFromDB.getId())) {
                     throw new AlreadyExistsException(
                             "This animal has been given multiple doses of this vaccine. " +
                                     "Modifications are not allowed for this type of vaccine.");

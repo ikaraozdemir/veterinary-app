@@ -78,15 +78,14 @@ public class AppointmentServiceImp implements AppointmentService {
 
         Optional<Appointment> optionalAppointment = this.appointmentRepository.findAppointmentByAppointmentDateAndDoctorId(
                 appointment.getAppointmentDate(), appointment.getDoctor().getId());
-
-        if (optionalAppointment.isPresent()) {
+        if (optionalAppointment.isPresent() && !(optionalAppointment.get().getId().equals(appointment.getId()))){
             throw new AlreadyExistsException("An appointment has already been scheduled for this date and time for this doctor.");
         }
 
         Optional<Appointment> optionalAppointmentForAnimal = this.appointmentRepository.findAppointmentByAppointmentDateAndAnimalId(
                 appointment.getAppointmentDate(), appointment.getAnimal().getId());
 
-        if (optionalAppointmentForAnimal.isPresent()) {
+        if (optionalAppointmentForAnimal.isPresent() && !(optionalAppointment.get().getId().equals(appointment.getId()))) {
             throw new AlreadyExistsException("An appointment has already been scheduled for this date and time for this animal.");
         }
 

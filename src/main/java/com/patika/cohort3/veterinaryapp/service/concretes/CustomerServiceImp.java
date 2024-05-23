@@ -22,6 +22,7 @@ public class CustomerServiceImp implements CustomerService {
     @Override
     public Customer save(Customer customer) {
         customer.setMail(customer.getMail().toLowerCase().trim());
+
         Optional<Customer> optionalCustomer = this.customerRepository.findByMail(customer.getMail());
         if (optionalCustomer.isPresent()) {
             throw new AlreadyExistsException("Customer already exists.");
@@ -44,7 +45,7 @@ public class CustomerServiceImp implements CustomerService {
         this.getById(customer.getId());
         customer.setMail(customer.getMail().toLowerCase().trim());
         Optional<Customer> optionalCustomer = this.customerRepository.findByMail(customer.getMail());
-        if (optionalCustomer.isPresent()) {
+        if (optionalCustomer.isPresent() && !(optionalCustomer.get().getId().equals(customer.getId())) ) {
             throw new AlreadyExistsException("Customer already exists.");
         }
         try {

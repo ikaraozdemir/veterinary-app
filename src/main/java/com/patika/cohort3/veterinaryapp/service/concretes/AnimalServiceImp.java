@@ -43,7 +43,7 @@ public class AnimalServiceImp implements AnimalService {
         String normalizedName = StringUtils.normalizeSpaces(animal.getName()) ;
 
         Optional<Animal> optionalAnimal = this.animalRepository.findAnimalByNameAndCustomerId(normalizedName, animal.getCustomer().getId());
-        if (optionalAnimal.isPresent()) {
+        if (optionalAnimal.isPresent() && !(optionalAnimal.get().getId().equals(animal.getId()))) {
             throw new AlreadyExistsException("Animal already exists.");
         }
         Customer customer = this.customerService.getById(animal.getCustomer().getId());

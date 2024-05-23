@@ -48,7 +48,7 @@ public class DoctorServiceImp implements DoctorService {
         this.getById(doctor.getId());
         Optional<Doctor> optionalDoctor =this.doctorRepository.findByMail(doctor.getMail());
         doctor.setMpNo(doctor.getMpNo().toLowerCase().trim());
-        if (optionalDoctor.isPresent()) {
+        if (optionalDoctor.isPresent() && !optionalDoctor.get().getMpNo().equals(doctor.getMpNo())) {
             throw new AlreadyExistsException("Doctor already exists.");
         }
         try {
