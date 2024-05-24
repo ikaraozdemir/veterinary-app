@@ -75,7 +75,7 @@ The Veterinary Management System is a REST API developed as part of the Patika+ 
 
 1. Make sure that at least Java 22.0.1 is installed on your system.
 ```bash
-java --version
+java -version
 ```
 2. To clone the project repository, run the following command in the terminal:
 ```bash
