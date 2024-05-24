@@ -92,10 +92,8 @@ java -version
 ## Secreenshots
 * UML Diagram
   ![UML_diagram](images/veterinary-app-UML.png)
-<br>
-<br>
+
 * All animals belonging to the customer with the given ID
-<br>
 ![customer_ainmals](images/customerId_animals.png)
 <br>
 <br>
