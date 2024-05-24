@@ -95,28 +95,22 @@ java -version
 
 * All animals belonging to the customer with the given ID
 ![customer_ainmals](images/customerId_animals.png)
-<br>
-<br>
+
 * The animals are filtered by customer ID.
 ![animals_customerID](images/animals_customerID.png)
-<br>
-<br>
+
 * All vaccines received by the animal with the given ID
 ![animal_vaccines](images/animalID_vaccines.png)
-<br>
-<br>
+
 * The vaccines with protection end dates between the given dates
 ![expiring_soon](images/vaccines_expiring_soon.png)
-<br>
-<br>
+
 * The appointments of the doctor with the given ID that fall within the specified date range
 ![doctor_appointments](images/appointments_doctorID.png)
-<br>
-<br>
+
 * The appointments of the animal with the given ID that fall within the specified date range
   ![doctor_appointments](images/appointment_animalID.png)
-<br>
-<br>
+
 The link to the video where I briefly explain the project: 
 
 ## License
