@@ -15,7 +15,6 @@ public interface AnimalMapper {
     AnimalMapper INSTANCE = Mappers.getMapper(AnimalMapper.class);
     Animal asEntity(AnimalSaveRequest animalSaveRequest);
     Animal asEntity(AnimalUpdateRequest animalUpdateRequest);
-    //    AnimalResponse mapToSaveResponse(Customer customer);
     AnimalResponse mapToResponse(Animal animal);
     AnimalGetVaccinesResponse mapToGetVaccineResponse(Animal animal);
     List<AnimalResponse> mapToResponse(List<Animal> animals);
