@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Data
 public class AppointmentUpdateRequest {
     private Long id;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime appointmentDate;
     private AvailableDateDoctorRequest doctor;
     private VaccineAnimalRequest animal;

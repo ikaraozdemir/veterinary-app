@@ -1,10 +1,6 @@
 package com.patika.cohort3.veterinaryapp.service.abstracts;
 
 import com.patika.cohort3.veterinaryapp.entity.Appointment;
-import com.patika.cohort3.veterinaryapp.entity.Vaccine;
-
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 

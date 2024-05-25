@@ -8,13 +8,9 @@ import com.patika.cohort3.veterinaryapp.repository.AppointmentRepository;
 import com.patika.cohort3.veterinaryapp.service.abstracts.AnimalService;
 import com.patika.cohort3.veterinaryapp.service.abstracts.AppointmentService;
 import com.patika.cohort3.veterinaryapp.service.abstracts.DoctorService;
-import com.patika.cohort3.veterinaryapp.utilities.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.time.DateTimeException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +24,10 @@ public class AppointmentServiceImp implements AppointmentService {
 
     @Override
     public Appointment save(Appointment appointment) {
+
+        Doctor doctor = this.doctorService.getById(appointment.getDoctor().getId());
+        Animal animal = this.animalService.getById(appointment.getAnimal().getId());
+
 
         Doctor doctorWithAvailableDate = this.doctorService.findByIdAndAvailableDatesDate(
                 appointment.getDoctor().getId(), appointment.getAppointmentDate().toLocalDate());
@@ -57,10 +57,8 @@ public class AppointmentServiceImp implements AppointmentService {
                             "The requested appointment time falls outside of our working hours for this doctor.");
         }
 
-        Doctor doctor = this.doctorService.getById(appointment.getDoctor().getId());
         appointment.setDoctor(doctor);
 
-        Animal animal = this.animalService.getById(appointment.getAnimal().getId());
         appointment.setAnimal(animal);
         return appointmentRepository.save(appointment);
     }
@@ -69,13 +67,16 @@ public class AppointmentServiceImp implements AppointmentService {
     public Appointment update(Appointment appointment) {
         this.getById(appointment.getId());
 
+        Doctor optionalDoctor = this.doctorService.getById(appointment.getDoctor().getId());
+        Animal animal = this.animalService.getById(appointment.getAnimal().getId());
+
         Doctor doctorWithAvailableDate = this.doctorService.findByIdAndAvailableDatesDate(
                 appointment.getDoctor().getId(), appointment.getAppointmentDate().toLocalDate());
 
         if (doctorWithAvailableDate == null) {
             throw new DoctorNotAvailableException("The doctor is not available on the specified day.");
         }
-
+        //Ensure that the appointment ID is different from the one you wish to update
         Optional<Appointment> optionalAppointment = this.appointmentRepository.findAppointmentByAppointmentDateAndDoctorId(
                 appointment.getAppointmentDate(), appointment.getDoctor().getId());
         if (optionalAppointment.isPresent() && !(optionalAppointment.get().getId().equals(appointment.getId()))){
@@ -84,7 +85,6 @@ public class AppointmentServiceImp implements AppointmentService {
 
         Optional<Appointment> optionalAppointmentForAnimal = this.appointmentRepository.findAppointmentByAppointmentDateAndAnimalId(
                 appointment.getAppointmentDate(), appointment.getAnimal().getId());
-
         if (optionalAppointmentForAnimal.isPresent() && !(optionalAppointment.get().getId().equals(appointment.getId()))) {
             throw new AlreadyExistsException("An appointment has already been scheduled for this date and time for this animal.");
         }
@@ -99,10 +99,8 @@ public class AppointmentServiceImp implements AppointmentService {
                             "The requested appointment time falls outside of our working hours for this doctor.");
         }
 
-        Doctor optionalDoctor = this.doctorService.getById(appointment.getDoctor().getId());
-        appointment.setDoctor(optionalDoctor);
 
-        Animal animal = this.animalService.getById(appointment.getAnimal().getId());
+        appointment.setDoctor(optionalDoctor);
         appointment.setAnimal(animal);
         return this.appointmentRepository.save(appointment);
     }
