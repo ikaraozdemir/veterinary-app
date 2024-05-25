@@ -1,7 +1,4 @@
 package com.patika.cohort3.veterinaryapp.entity;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Data;
@@ -19,7 +16,7 @@ public class Customer {
     @Column(unique = true)
     private String mpNo;
     @Email
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String mail;
     private String address;
     private String city;

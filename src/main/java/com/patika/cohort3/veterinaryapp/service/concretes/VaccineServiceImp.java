@@ -8,12 +8,10 @@ import com.patika.cohort3.veterinaryapp.exception.DateValidationException;
 import com.patika.cohort3.veterinaryapp.repository.AnimalRepository;
 import com.patika.cohort3.veterinaryapp.repository.VaccineRepository;
 import com.patika.cohort3.veterinaryapp.service.abstracts.VaccineService;
-import com.patika.cohort3.veterinaryapp.utilities.Message;
 import com.patika.cohort3.veterinaryapp.utilities.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -33,12 +31,14 @@ public class VaccineServiceImp implements VaccineService {
         String normalizedName = StringUtils.normalizeSpaces(vaccine.getName());
         String trimmedCode = vaccine.getCode().toUpperCase().trim();
 
+        Optional<Vaccine> vaccineForCodeCheck = vaccineRepository.findVaccineByCode(vaccine.getCode());
+        if (vaccineForCodeCheck.isPresent()) {
+            throw new AlreadyExistsException("This animal has already been given the vaccine with this code.");
+        }
+
         //Check the protection end date for a new dose  and whether the animal has received that vaccine.
         List<Vaccine> vaccines = vaccineRepository.findVaccineByNameAndAnimalId(normalizedName, vaccine.getAnimal().getId());
         for (Vaccine vaccineFromDB : vaccines) {
-            if (Objects.equals(trimmedCode, vaccineFromDB.getCode())) {
-                throw new AlreadyExistsException("This animal has already been given this vaccine with this code.");
-            }
             if (vaccineFromDB.getProtectionFinishDate().isAfter(LocalDate.now())) {
                 throw new DateValidationException("The vaccine's protection end date has not yet arrived.");
             }
@@ -67,16 +67,19 @@ public class VaccineServiceImp implements VaccineService {
         String normalizedName = StringUtils.normalizeSpaces(vaccine.getName());
         String trimmedCode = vaccine.getCode().toUpperCase().trim();
 
-        //Check if the animal received multiple doses of the updated vaccine
+        Optional<Vaccine> vaccineForCodeCheck = vaccineRepository.findVaccineByCode(vaccine.getCode());
+        if (vaccineForCodeCheck.isPresent() && !vaccine.getId().equals(vaccineForCodeCheck.get().getId())) {
+            throw new AlreadyExistsException("This animal has already been given the vaccine with this code.");
+        }
+
+
+        //Do not allow the user to update a vaccine if an animal has received multiple doses
         List<Vaccine> vaccines = vaccineRepository.findVaccineByNameAndAnimalId(normalizedName, vaccine.getAnimal().getId());
          for (Vaccine vaccineFromDB : vaccines) {
                 if (!Objects.equals(trimmedCode, vaccineFromDB.getCode()) && vaccine.getId().equals(vaccineFromDB.getId())) {
                     throw new AlreadyExistsException(
                             "This animal has been given multiple doses of this vaccine. " +
                                     "Modifications are not allowed for this type of vaccine.");
-                }
-                if (Objects.equals(trimmedCode, vaccineFromDB.getCode())&& !Objects.equals(vaccine.getId(), vaccineFromDB.getId())) {
-                    throw new AlreadyExistsException("This animal has already been given this vaccine with this code.");
                 }
             }
 

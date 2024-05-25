@@ -25,43 +25,42 @@ public class DoctorServiceImp implements DoctorService {
 
     @Override
     public Doctor save(Doctor doctor) {
+        doctor.setMail(doctor.getMail().toLowerCase().trim());
+        doctor.setMpNo(StringUtils.removeSpaces(doctor.getMpNo()));
+        doctor.setName(StringUtils.normalizeSpaces(doctor.getName()));
+
         Optional<Doctor> optionalDoctor =this.doctorRepository.findByMail(doctor.getMail());
-        doctor.setMpNo(doctor.getMpNo().toLowerCase().trim());
         if (optionalDoctor.isPresent()) {
             throw new AlreadyExistsException("Doctor already exists.");
         }
-        try {
-            doctor.setName(StringUtils.normalizeSpaces(doctor.getName()));
-            doctor.setMpNo(StringUtils.removeSpaces(doctor.getMpNo()));
-            return doctorRepository.save(doctor);
-        } catch (DataIntegrityViolationException e) {
-            String errorMessage = e.getRootCause().getMessage();
-            if (errorMessage.contains("mp_no") && errorMessage.contains("already exists")) {
-                throw new DataIntegrityViolationException("This phone number is already in use. Please enter a different phone number.");
-            }
-            throw e;
+
+        Optional<Doctor> optionalDoctor2 = this.doctorRepository.findByMpNo(doctor.getMpNo());
+        if (optionalDoctor2.isPresent()) {
+            throw new AlreadyExistsException("This phone number is already in use. Please enter a different phone number.");
         }
+
+        return doctorRepository.save(doctor);
     }
 
     @Override
     public Doctor update(Doctor doctor) {
         this.getById(doctor.getId());
+        doctor.setMail(doctor.getMail().toLowerCase().trim());
+        doctor.setMpNo(StringUtils.removeSpaces(doctor.getMpNo()));
+        doctor.setName(StringUtils.normalizeSpaces(doctor.getName()));
+
         Optional<Doctor> optionalDoctor =this.doctorRepository.findByMail(doctor.getMail());
-        doctor.setMpNo(doctor.getMpNo().toLowerCase().trim());
-        if (optionalDoctor.isPresent() && !optionalDoctor.get().getMpNo().equals(doctor.getMpNo())) {
+        if (optionalDoctor.isPresent() && !optionalDoctor.get().getId().equals(doctor.getId())) {
             throw new AlreadyExistsException("Doctor already exists.");
         }
-        try {
-            doctor.setName(StringUtils.normalizeSpaces(doctor.getName()));
-            doctor.setMpNo(StringUtils.removeSpaces(doctor.getMpNo()));
-            return doctorRepository.save(doctor);
-        } catch (DataIntegrityViolationException e) {
-            String errorMessage = e.getRootCause().getMessage();
-            if (errorMessage.contains("mp_no") && errorMessage.contains("already exists")) {
-                throw new DataIntegrityViolationException("This phone number is already in use. Please enter a different phone number.");
-            }
-            throw e;
+
+        Optional<Doctor> optionalDoctor2 = this.doctorRepository.findByMpNo(doctor.getMpNo());
+        if (optionalDoctor2.isPresent() && !optionalDoctor2.get().getId().equals(doctor.getId())) {
+            throw new AlreadyExistsException("This phone number is already in use. Please enter a different phone number.");
         }
+
+        return doctorRepository.save(doctor);
+
     }
 
     @Override

@@ -3,15 +3,10 @@ package com.patika.cohort3.veterinaryapp.controller;
 
 import com.patika.cohort3.veterinaryapp.dto.request.animal.AnimalSaveRequest;
 import com.patika.cohort3.veterinaryapp.dto.request.animal.AnimalUpdateRequest;
-import com.patika.cohort3.veterinaryapp.dto.request.customer.CustomerSaveRequest;
 import com.patika.cohort3.veterinaryapp.dto.response.animal.AnimalGetVaccinesResponse;
 import com.patika.cohort3.veterinaryapp.dto.response.animal.AnimalResponse;
-import com.patika.cohort3.veterinaryapp.dto.response.customer.CustomerResponse;
-import com.patika.cohort3.veterinaryapp.dto.response.customer.CustomerSaveResponse;
 import com.patika.cohort3.veterinaryapp.entity.Animal;
-import com.patika.cohort3.veterinaryapp.entity.Customer;
 import com.patika.cohort3.veterinaryapp.mapper.AnimalMapper;
-import com.patika.cohort3.veterinaryapp.mapper.CustomerMapper;
 import com.patika.cohort3.veterinaryapp.result.Result;
 import com.patika.cohort3.veterinaryapp.result.ResultData;
 import com.patika.cohort3.veterinaryapp.service.abstracts.AnimalService;
@@ -20,7 +15,6 @@ import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -1,15 +1,8 @@
 package com.patika.cohort3.veterinaryapp.controller;
-
-
-import com.patika.cohort3.veterinaryapp.dto.request.animal.AnimalSaveRequest;
-import com.patika.cohort3.veterinaryapp.dto.request.animal.AnimalUpdateRequest;
 import com.patika.cohort3.veterinaryapp.dto.request.vaccine.VaccineSaveRequest;
 import com.patika.cohort3.veterinaryapp.dto.request.vaccine.VaccineUpdateRequest;
-import com.patika.cohort3.veterinaryapp.dto.response.animal.AnimalResponse;
 import com.patika.cohort3.veterinaryapp.dto.response.vaccine.VaccineResponse;
-import com.patika.cohort3.veterinaryapp.entity.Animal;
 import com.patika.cohort3.veterinaryapp.entity.Vaccine;
-import com.patika.cohort3.veterinaryapp.mapper.AnimalMapper;
 import com.patika.cohort3.veterinaryapp.mapper.VaccineMapper;
 import com.patika.cohort3.veterinaryapp.result.Result;
 import com.patika.cohort3.veterinaryapp.result.ResultData;

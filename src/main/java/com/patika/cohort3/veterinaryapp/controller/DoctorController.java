@@ -2,12 +2,9 @@ package com.patika.cohort3.veterinaryapp.controller;
 
 import com.patika.cohort3.veterinaryapp.dto.request.doctor.DoctorSaveRequest;
 import com.patika.cohort3.veterinaryapp.dto.request.doctor.DoctorUpdateRequest;
-import com.patika.cohort3.veterinaryapp.dto.response.customer.CustomerResponse;
 import com.patika.cohort3.veterinaryapp.dto.response.doctor.DoctorResponse;
 import com.patika.cohort3.veterinaryapp.dto.response.doctor.DoctorSaveResponse;
-import com.patika.cohort3.veterinaryapp.entity.Customer;
 import com.patika.cohort3.veterinaryapp.entity.Doctor;
-import com.patika.cohort3.veterinaryapp.mapper.CustomerMapper;
 import com.patika.cohort3.veterinaryapp.mapper.DoctorMapper;
 import com.patika.cohort3.veterinaryapp.result.Result;
 import com.patika.cohort3.veterinaryapp.result.ResultData;

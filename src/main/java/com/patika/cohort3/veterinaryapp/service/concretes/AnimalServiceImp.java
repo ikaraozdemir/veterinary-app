@@ -5,10 +5,8 @@ import com.patika.cohort3.veterinaryapp.entity.Customer;
 import com.patika.cohort3.veterinaryapp.exception.AlreadyExistsException;
 import com.patika.cohort3.veterinaryapp.exception.NotFoundException;
 import com.patika.cohort3.veterinaryapp.repository.AnimalRepository;
-import com.patika.cohort3.veterinaryapp.repository.CustomerRepository;
 import com.patika.cohort3.veterinaryapp.service.abstracts.AnimalService;
 import com.patika.cohort3.veterinaryapp.service.abstracts.CustomerService;
-import com.patika.cohort3.veterinaryapp.utilities.Message;
 import com.patika.cohort3.veterinaryapp.utilities.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -65,7 +63,7 @@ public class AnimalServiceImp implements AnimalService {
 
     @Override
     public Animal findByName(String name) {
-        return this.animalRepository.findByName(name).orElseThrow(() -> new NotFoundException("No animal found named " + name));
+        return this.animalRepository.findByName(StringUtils.normalizeSpaces(name)).orElseThrow(() -> new NotFoundException("No animal found named " + name));
     }
 
     @Override

@@ -2,14 +2,10 @@ package com.patika.cohort3.veterinaryapp.controller;
 
 import com.patika.cohort3.veterinaryapp.dto.request.available.date.AvailableDateSaveRequest;
 import com.patika.cohort3.veterinaryapp.dto.request.available.date.AvailableDateUpdateRequest;
-import com.patika.cohort3.veterinaryapp.dto.request.customer.CustomerUpdateRequest;
 import com.patika.cohort3.veterinaryapp.dto.response.available.date.AvailableDateResponse;
-import com.patika.cohort3.veterinaryapp.dto.response.customer.CustomerResponse;
 import com.patika.cohort3.veterinaryapp.entity.AvailableDate;
-import com.patika.cohort3.veterinaryapp.entity.Customer;
 
 import com.patika.cohort3.veterinaryapp.mapper.AvailableDateMapper;
-import com.patika.cohort3.veterinaryapp.mapper.CustomerMapper;
 import com.patika.cohort3.veterinaryapp.result.Result;
 import com.patika.cohort3.veterinaryapp.result.ResultData;
 import com.patika.cohort3.veterinaryapp.service.abstracts.AvailableDateService;
@@ -40,7 +36,6 @@ public class AvailableDateController {
     @ResponseStatus(HttpStatus.OK)
     public ResultData<AvailableDateResponse> update(@Valid @RequestBody AvailableDateUpdateRequest request) {
         AvailableDate updateAvailableDate = AvailableDateMapper.INSTANCE.asEntity(request);
-        System.out.println(request.getDoctor().getId() + "requestten gelen doktor id");
         this.availableDateService.update(updateAvailableDate);
         AvailableDateResponse availableDateResponse = AvailableDateMapper.INSTANCE.mapToResponse(updateAvailableDate);
         return ResultHelper.success(availableDateResponse);

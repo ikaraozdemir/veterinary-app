@@ -1,7 +1,5 @@
 package com.patika.cohort3.veterinaryapp.dto.response.vaccine;
 
-import com.patika.cohort3.veterinaryapp.dto.request.vaccine.VaccineAnimalRequest;
-import jakarta.persistence.Column;
 import lombok.Data;
 
 import java.time.LocalDate;

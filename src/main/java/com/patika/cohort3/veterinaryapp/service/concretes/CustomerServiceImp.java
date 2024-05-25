@@ -1,11 +1,9 @@
 package com.patika.cohort3.veterinaryapp.service.concretes;
-
 import com.patika.cohort3.veterinaryapp.entity.Customer;
 import com.patika.cohort3.veterinaryapp.exception.AlreadyExistsException;
 import com.patika.cohort3.veterinaryapp.exception.NotFoundException;
 import com.patika.cohort3.veterinaryapp.repository.CustomerRepository;
 import com.patika.cohort3.veterinaryapp.service.abstracts.CustomerService;
-import com.patika.cohort3.veterinaryapp.utilities.Message;
 import com.patika.cohort3.veterinaryapp.utilities.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -48,7 +46,7 @@ public class CustomerServiceImp implements CustomerService {
         if (optionalCustomer.isPresent() && !(optionalCustomer.get().getId().equals(customer.getId())) ) {
             throw new AlreadyExistsException("Customer already exists.");
         }
-        try {
+        try{
             customer.setMpNo(StringUtils.removeSpaces(customer.getMpNo()));
             customer.setName(StringUtils.normalizeSpaces(customer.getName()));
             return customerRepository.save(customer);
@@ -80,6 +78,6 @@ public class CustomerServiceImp implements CustomerService {
 
     @Override
     public Customer findByName(String name) {
-        return this.customerRepository.findByName(name).orElseThrow(() -> new NotFoundException("No customer found with ID " + name));
+        return this.customerRepository.findByName(StringUtils.normalizeSpaces(name)).orElseThrow(() -> new NotFoundException("No customer found with name " + name));
     }
 }
