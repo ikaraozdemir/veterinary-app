@@ -104,8 +104,6 @@ java -version
 * The appointments of the animal with the given ID that fall within the specified date range
   ![doctor_appointments](images/appointment_animalID.png)
 
-The link to the video where I briefly explain the project: 
-
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
