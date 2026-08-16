@@ -6,15 +6,17 @@ import com.patika.cohort3.veterinaryapp.dto.response.animal.AnimalGetVaccinesRes
 import com.patika.cohort3.veterinaryapp.dto.response.animal.AnimalResponse;
 import com.patika.cohort3.veterinaryapp.entity.Animal;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
+
 
 @Mapper(componentModel="spring" )
 public interface AnimalMapper {
     AnimalMapper INSTANCE = Mappers.getMapper(AnimalMapper.class);
     Animal asEntity(AnimalSaveRequest animalSaveRequest);
-    Animal asEntity(AnimalUpdateRequest animalUpdateRequest);
+    Animal asEntity(AnimalUpdateRequest animalUpdateRequest, @MappingTarget Animal animal);
     AnimalResponse mapToResponse(Animal animal);
     AnimalGetVaccinesResponse mapToGetVaccineResponse(Animal animal);
     List<AnimalResponse> mapToResponse(List<Animal> animals);

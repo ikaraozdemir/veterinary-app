@@ -37,9 +37,8 @@ public class AnimalController {
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
     public ResultData<AnimalResponse> update(@Valid @RequestBody AnimalUpdateRequest request) {
-        Animal updateAnimal = AnimalMapper.INSTANCE.asEntity(request);
-        this.animalService.update(updateAnimal);
-        AnimalResponse animalResponse = AnimalMapper.INSTANCE.mapToResponse(updateAnimal);
+        Animal updatedAnimal = this.animalService.update(request);
+        AnimalResponse animalResponse = AnimalMapper.INSTANCE.mapToResponse(updatedAnimal);
         return ResultHelper.success(animalResponse);
     }
 
