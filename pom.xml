@@ -14,7 +14,7 @@
     <name>veterinary-app</name>
     <description>veterinary-app</description>
     <properties>
-        <java.version>22</java.version>
+        <java.version>21</java.version>
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
     </properties>
     <dependencies>
@@ -66,6 +66,7 @@
 
     <build>
         <plugins>
+            <!-- Standard Spring Boot Maven Plugin Configuration -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -73,36 +74,40 @@
                     <excludeDevtools>false</excludeDevtools>
                 </configuration>
             </plugin>
+
+            <!-- FIXED: Updated to version 3.13.0 for proper Java 22 support -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.13.0</version>
                 <configuration>
-                    <source>1.8</source> <!-- depending on your project -->
-                    <target>1.8</target> <!-- depending on your project -->
+                    <!-- FIXED: Aligned compiler targets with your java.version property (22) -->
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                     <annotationProcessorPaths>
+                        <!-- FIXED: Removed the missing ${lombok.version} property variable -->
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>${lombok.version}</version>
+                            <version>1.18.32</version>
                         </path>
+                        <!-- MapStruct annotation processor -->
                         <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>
                             <version>${org.mapstruct.version}</version>
                         </path>
-                        <!-- other annotation processors -->
+                        <!-- FIXED: Binding Lombok and MapStruct together so they recognize each other -->
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>0.2.0</version>
+                        </path>
                     </annotationProcessorPaths>
                     <compilerArgs>
-                        <arg>
-                            -Amapstruct.suppressGeneratorTimestamp=true
-                        </arg>
-                        <arg>
-                            -Amapstruct.suppressGeneratorVersionInfoComment=true
-                        </arg>
-                        <arg>
-                            -Amapstruct.defaultComponentModel=spring
-                        </arg>
+                        <arg>-Amapstruct.suppressGeneratorTimestamp=true</arg>
+                        <arg>-Amapstruct.suppressGeneratorVersionInfoComment=true</arg>
+                        <arg>-Amapstruct.defaultComponentModel=spring</arg>
                     </compilerArgs>
                 </configuration>
             </plugin>
