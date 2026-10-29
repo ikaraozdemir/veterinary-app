@@ -26,7 +26,7 @@ public class AppointmentController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public ResultData<AppointmentResponse> save(@RequestBody AppointmentSaveRequest request) {
+    public ResultData<AppointmentResponse> save(@Valid @RequestBody AppointmentSaveRequest request) {
         Appointment saveAppointment = AppointmentMapper.INSTANCE.asEntity(request);
         this.appointmentService.save(saveAppointment);
         AppointmentResponse appointmentResponse = AppointmentMapper.INSTANCE.mapToResponse(saveAppointment);
@@ -37,8 +37,8 @@ public class AppointmentController {
     @ResponseStatus(HttpStatus.OK)
     public ResultData<AppointmentResponse> update(@Valid @RequestBody AppointmentUpdateRequest request) {
         Appointment updateAppointment = AppointmentMapper.INSTANCE.asEntity(request);
-        this.appointmentService.update(updateAppointment);
-        AppointmentResponse appointmentResponse = AppointmentMapper.INSTANCE.mapToResponse(updateAppointment);
+        Appointment updatedAppointment = this.appointmentService.update(updateAppointment);
+        AppointmentResponse appointmentResponse = AppointmentMapper.INSTANCE.mapToResponse(updatedAppointment);
         return ResultHelper.success(appointmentResponse);
     }
 
