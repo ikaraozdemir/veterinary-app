@@ -1,6 +1,5 @@
 package com.patika.cohort3.veterinaryapp.service.concretes;
 
-import com.patika.cohort3.veterinaryapp.dto.request.animal.AnimalUpdateRequest;
 import com.patika.cohort3.veterinaryapp.entity.Animal;
 import com.patika.cohort3.veterinaryapp.entity.Customer;
 import com.patika.cohort3.veterinaryapp.exception.AlreadyExistsException;
@@ -38,23 +37,21 @@ public class AnimalServiceImp implements AnimalService {
 
 
     @Override
-    public Animal update(AnimalUpdateRequest request) {
+    public Animal update(Animal animal) {
 
-        Animal existingAnimal = this.getById(request.getId());
+        Animal existingAnimal = this.getById(animal.getId());
 
-        AnimalMapper.INSTANCE.asEntity(request, existingAnimal);
-
-        String nameToCheck = request.getName() != null ? request.getName() : existingAnimal.getName();
+        String nameToCheck = animal.getName() != null ? animal.getName() : existingAnimal.getName();
         String normalizedName = StringUtils.normalizeSpaces(nameToCheck);
 
-        Optional<Animal> duplicateAnimal = this.animalRepository.findAnimalByNameAndCustomerId(normalizedName, request.getCustomer().getId());
-        if (duplicateAnimal.isPresent() && !(duplicateAnimal.get().getId().equals(request.getId()))) {
-            throw new AlreadyExistsException("Animal already exists.");
+        Optional<Animal> duplicateAnimal = this.animalRepository.findAnimalByNameAndCustomerId(normalizedName, animal.getCustomer().getId());
+        if (duplicateAnimal.isPresent() && !(duplicateAnimal.get().getId().equals(animal.getId()))) {
+            throw new AlreadyExistsException("An animal with the same name already exists for this customer.");
         }
 
-        Customer customer = this.customerService.getById(request.getCustomer().getId());
+        Customer customer = this.customerService.getById(animal.getCustomer().getId());
 
-        AnimalMapper.INSTANCE.asEntity(request, existingAnimal);
+        AnimalMapper.INSTANCE.updateEntity(animal, existingAnimal);
 
         existingAnimal.setName(normalizedName);
         existingAnimal.setCustomer(customer);
