@@ -1,11 +1,9 @@
 package com.patika.cohort3.veterinaryapp;
 
-import com.patika.cohort3.veterinaryapp.dto.request.animal.AnimalCustomerRequest;
-import com.patika.cohort3.veterinaryapp.dto.request.animal.AnimalUpdateRequest;
-import com.patika.cohort3.veterinaryapp.dto.request.customer.CustomerUpdateRequest;
 import com.patika.cohort3.veterinaryapp.entity.Animal;
 import com.patika.cohort3.veterinaryapp.entity.Customer;
 import com.patika.cohort3.veterinaryapp.exception.AlreadyExistsException;
+import com.patika.cohort3.veterinaryapp.exception.NotFoundException;
 import com.patika.cohort3.veterinaryapp.repository.AnimalRepository;
 import com.patika.cohort3.veterinaryapp.service.abstracts.CustomerService;
 import com.patika.cohort3.veterinaryapp.service.concretes.AnimalServiceImp;
@@ -96,13 +94,10 @@ public class AnimalServiceTest {
         Customer customer = new Customer();
         customer.setId(1L);
 
-        AnimalUpdateRequest updatedAnimalRequest = new AnimalUpdateRequest();
+        Animal updatedAnimalRequest = new Animal();
         updatedAnimalRequest.setId(10L);
         updatedAnimalRequest.setName(" Yeni İsim ");
-
-        AnimalCustomerRequest customerRequest = new AnimalCustomerRequest();
-        customerRequest.setId(1L);
-        updatedAnimalRequest.setCustomer(customerRequest);
+        updatedAnimalRequest.setCustomer(customer);
 
         Animal existingAnimal = new Animal();
         existingAnimal.setId(10L);
@@ -124,5 +119,83 @@ public class AnimalServiceTest {
         assertNotNull(result);
         assertEquals("Yeni İsim", result.getName());
         verify(animalRepository, times(1)).save(any(Animal.class));
+    }
+
+    @Test
+    void update_WhenAnimalNotFound_ShouldThrowNotFoundException() {
+        Animal updatedAnimalRequest = new Animal();
+        updatedAnimalRequest.setId(10L);
+
+        when(animalRepository.findById(10L)).thenReturn(Optional.empty());
+
+        // Did it throw the expected exception?
+        NotFoundException exception  = assertThrows(NotFoundException.class, () -> {
+            animalService.update(updatedAnimalRequest);
+        });
+
+        // did it throw with the right text?
+        assertEquals("No animal found with ID 10", exception.getMessage());
+
+        // Verify that save was never called
+        verify(animalRepository, never()).save(any(Animal.class));
+
+        // Verify that customerService.getById was never reached — the exception came from AnimalServiceImp's own getById via animalRepository.findById.
+        verify(customerService, never()).getById(any(Long.class));
+
+        // Verify that findAnimalByNameAndCustomerId was never called since to test the code path, the exception should be thrown before that method is called
+        verify(animalRepository, never()).findAnimalByNameAndCustomerId(any(String.class), any(Long.class));
+    }
+
+    @Test
+    void update_WhenDuplicateAnimalExists_ShouldThrowAlreadyExistsException(){
+        Customer customer = new Customer();
+        customer.setId(1L);
+
+        Animal updatedAnimal = new Animal();
+        updatedAnimal.setId(10L);
+        updatedAnimal.setName("Duplicate Name");
+        updatedAnimal.setCustomer(customer);
+        updatedAnimal.setCustomer(customer);
+
+        Animal existingAnimal = new Animal();
+        existingAnimal.setId(20L);
+        existingAnimal.setName("Duplicate Name");
+        existingAnimal.setCustomer(customer);
+
+        when(animalRepository.findById(10L)).thenReturn(Optional.of(updatedAnimal));
+
+        when(animalRepository.findAnimalByNameAndCustomerId(any(String.class), any(Long.class)))
+                .thenReturn(Optional.of(existingAnimal));
+
+        // Did it throw the expected exception?
+        AlreadyExistsException exception = assertThrows(AlreadyExistsException.class, () -> {
+            animalService.update(updatedAnimal);
+        });
+
+        // did it throw with the right text?
+        assertEquals("An animal with the same name already exists for this customer.", exception.getMessage());
+
+        // Verify that save was never called
+        verify(animalRepository, never()).save(any(Animal.class));
+    }
+
+    @Test
+    void delete_WhenAnimalExists_ShouldDeleteSuccessfully() {
+
+        Customer customer = new Customer();
+        customer.setId(1L);
+
+        Animal existingAnimal = new Animal();
+        existingAnimal.setId(10L);
+        existingAnimal.setName("AnimalDelete");
+
+        existingAnimal.setCustomer(customer);
+
+        when(animalRepository.findById(10L)).thenReturn(Optional.of(existingAnimal));
+
+        boolean result = animalService.delete(10L);
+
+        assertTrue(result);
+        verify(animalRepository, times(1)).delete(existingAnimal);        
     }
 }
