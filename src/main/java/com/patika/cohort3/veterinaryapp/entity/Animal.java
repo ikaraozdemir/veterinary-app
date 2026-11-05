@@ -3,12 +3,15 @@ package com.patika.cohort3.veterinaryapp.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class Animal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
