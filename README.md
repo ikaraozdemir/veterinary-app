@@ -17,8 +17,8 @@ The Veterinary Management System is a REST API developed as part of the Patika+ 
 | `/v1/customers`                                                    |       GET       | Retrieves all customers                                                                              |
 | `/v1/customers`                                                    |       PUT       | Updates the customer with the given ID                                                               |
 | `/v1/customers`                                                    |      POST       | Adds a new customer                                                                                  |
-| `/v1/customers/{name}`                                             |       GET       | Retrieves the customer with the given name                                                           |
-| `/v1/customers/customer/{id}`                                      |       GET       | Retrieves the customer with the given ID                                                             |
+| `/v1/customers/search?name={name}`                                 |       GET       | Retrieves the customer with the given name                                                           |
+| `/v1/customers/{id}`                                               |       GET       | Retrieves the customer with the given ID                                                             |
 | `/v1/customers/{id}`                                               |     DELETE      | Deletes the customer with the given ID                                                               |
 | `/v1/customers/{id}/animals`                                       |       GET       | Retrieves all animals belonging to the customer with the given ID.                                   |
 |                                                                    |                 |                                                                                                      |
@@ -26,10 +26,10 @@ The Veterinary Management System is a REST API developed as part of the Patika+ 
 | `/v1/animals`                                                      |       GET       | Retrieves all animals                                                                                |
 | `/v1/animals`                                                      |       PUT       | Updates the animal with the given ID                                                                 |
 | `/v1/animals`                                                      |      POST       | Adds a new animal                                                                                    |
-| `/v1/animals/{name}`                                               |       GET       | Retrieves the animal with the given name                                                             |
+| `/v1/animals/search?name={name}`                                   |       GET       | Retrieves the animal with the given name                                                             |
 | `/v1/animals/{id}/vaccines`                                        |       GET       | Retrieves all vaccines received by the animal with the given ID.                                     |
-| `/v1/animals/customer/{customerId}`                                |       GET       | Retrieves all animals belonging to the customer with the given ID.                                   |
-| `/v1/animals/animal/{id}`                                          |       GET       | Retrieves the animal with the given ID                                                               |
+| `/v1/animals?customerId={customerId}`                              |       GET       | Retrieves all animals belonging to the customer with the given ID.                                   |
+| `/v1/animals/{id}`                                                 |       GET       | Retrieves the animal with the given ID                                                               |
 | `/v1/animals/{id}`                                                 |     DELETE      | Deletes the animal with the given ID                                                                 |
 |                                                                    |                 |                                                                                                      |
 | **vaccine**                                                        |                 |                                                                                                      |

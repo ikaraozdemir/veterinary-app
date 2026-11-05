@@ -12,7 +12,6 @@ import com.patika.cohort3.veterinaryapp.result.ResultData;
 import com.patika.cohort3.veterinaryapp.service.abstracts.CustomerService;
 import com.patika.cohort3.veterinaryapp.utilities.ResultHelper;
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -42,17 +41,17 @@ public class CustomerController {
         return ResultHelper.success(responses);
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<CustomerResponse> findByName(@PathParam("name") String name ) {
+    public ResultData<CustomerResponse> findByName(@RequestParam("name") String name ) {
         Customer customer = this.customerService.findByName(name);
         CustomerResponse customerResponse = CustomerMapper.INSTANCE.mapToResponse(customer);
         return ResultHelper.success(customerResponse);
     }
 
-    @GetMapping("/customer/{id}")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<CustomerResponse> findByName(@PathVariable("id") Long id ) {
+    public ResultData<CustomerResponse> findById(@PathVariable("id") Long id ) {
         Customer customer = this.customerService.getById(id);
         CustomerResponse customerResponse = CustomerMapper.INSTANCE.mapToResponse(customer);
         return ResultHelper.success(customerResponse);
