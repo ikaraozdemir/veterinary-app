@@ -27,7 +27,7 @@ public class AnimalController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public ResultData<AnimalResponse> save(@RequestBody AnimalSaveRequest request) {
+    public ResultData<AnimalResponse> save(@Valid @RequestBody AnimalSaveRequest request) {
         Animal saveAnimal = AnimalMapper.INSTANCE.asEntity(request);
         this.animalService.save(saveAnimal);
         AnimalResponse animalResponse = AnimalMapper.INSTANCE.mapToResponse(saveAnimal);
