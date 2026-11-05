@@ -13,6 +13,7 @@ import com.patika.cohort3.veterinaryapp.utilities.ResultHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class DoctorController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public ResultData<DoctorSaveResponse> save(@RequestBody DoctorSaveRequest request) {
+    public ResultData<DoctorSaveResponse> save(@Valid @RequestBody DoctorSaveRequest request) {
         Doctor saveDoctor = DoctorMapper.INSTANCE.asEntity(request);
         this.doctorService.save(saveDoctor);
         DoctorSaveResponse doctorSaveResponse = DoctorMapper.INSTANCE.mapToSaveResponse(saveDoctor);

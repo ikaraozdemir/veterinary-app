@@ -25,7 +25,7 @@ public class AvailableDateController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public ResultData<AvailableDateResponse> save(@RequestBody AvailableDateSaveRequest request) {
+    public ResultData<AvailableDateResponse> save(@Valid @RequestBody AvailableDateSaveRequest request) {
         AvailableDate saveAvailableDate = AvailableDateMapper.INSTANCE.asEntity(request);
         this.availableDateService.save(saveAvailableDate);
         AvailableDateResponse availableDateResponse = AvailableDateMapper.INSTANCE.mapToResponse(saveAvailableDate);

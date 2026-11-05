@@ -27,7 +27,7 @@ public class CustomerController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public ResultData<CustomerSaveResponse> save(@RequestBody CustomerSaveRequest request) {
+    public ResultData<CustomerSaveResponse> save(@Valid @RequestBody CustomerSaveRequest request) {
         Customer saveCustomer = CustomerMapper.INSTANCE.asEntity(request);
         this.customerService.save(saveCustomer);
         CustomerSaveResponse customerSaveResponse = CustomerMapper.INSTANCE.mapToSaveResponse(saveCustomer);
