@@ -12,7 +12,6 @@ import com.patika.cohort3.veterinaryapp.result.ResultData;
 import com.patika.cohort3.veterinaryapp.service.abstracts.AnimalService;
 import com.patika.cohort3.veterinaryapp.utilities.ResultHelper;
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -52,20 +51,23 @@ public class AnimalController {
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<List<AnimalResponse>> findAll() {
-        List<Animal> animals = this.animalService.findAll();
+    public ResultData<List<AnimalResponse>> findAll(
+            @RequestParam(value = "customerId", required = false) Long customerId) {
+        List<Animal> animals = customerId == null
+                ? this.animalService.findAll()
+                : this.animalService.findAnimalsByCustomerId(customerId);
         List<AnimalResponse> responses = AnimalMapper.INSTANCE.mapToResponse(animals);
         return ResultHelper.success(responses);
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<AnimalResponse> findByName(@PathParam("name") String name ) {
+    public ResultData<AnimalResponse> findByName(@RequestParam("name") String name ) {
         Animal animal = this.animalService.findByName(name);
         AnimalResponse animalResponse = AnimalMapper.INSTANCE.mapToResponse(animal);
         return ResultHelper.success(animalResponse);
     }
-    @GetMapping("/animal/{id}")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResultData<AnimalResponse> findById(@PathVariable("id") Long id) {
         Animal animal = this.animalService.getById(id);
@@ -73,18 +75,9 @@ public class AnimalController {
         return ResultHelper.success(animalResponse);
     }
 
-    @GetMapping("/customer/{customerId}")
-    @ResponseStatus(HttpStatus.OK)
-    public ResultData<List<AnimalResponse>> findAnimalsByCustomerId(@PathVariable("customerId") Long id ) {
-        List<Animal> animals = this.animalService.findAnimalsByCustomerId(id);
-        List<AnimalResponse> responses = AnimalMapper.INSTANCE.mapToResponse(animals);
-        return ResultHelper.success(responses);
-    }
-
     @GetMapping("/{id}/vaccines")
     public ResultData<AnimalGetVaccinesResponse>  findVaccinesByAnimalId(@PathVariable("id") Long id) {
         Animal animal = this.animalService.getById(id);
-        System.out.println(animal.getVaccines().get(0).getName());
         AnimalGetVaccinesResponse animalGetVaccinesResponse = AnimalMapper.INSTANCE.mapToGetVaccineResponse(animal);
         return ResultHelper.success(animalGetVaccinesResponse);
     }
