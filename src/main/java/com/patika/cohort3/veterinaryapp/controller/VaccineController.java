@@ -25,7 +25,7 @@ public class VaccineController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public ResultData<VaccineResponse> save(@RequestBody VaccineSaveRequest request) {
+    public ResultData<VaccineResponse> save(@Valid @RequestBody VaccineSaveRequest request) {
         Vaccine saveVaccine = VaccineMapper.INSTANCE.asEntity(request);
         this.vaccineService.save(saveVaccine);
         VaccineResponse vaccineResponse = VaccineMapper.INSTANCE.mapToResponse(saveVaccine);
