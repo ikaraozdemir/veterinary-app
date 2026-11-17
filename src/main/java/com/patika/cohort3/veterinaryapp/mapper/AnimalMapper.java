@@ -10,15 +10,21 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-
-@Mapper(componentModel="spring" )
+@Mapper(componentModel = "spring")
 public interface AnimalMapper {
-    AnimalMapper INSTANCE = Mappers.getMapper(AnimalMapper.class);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "appointments", ignore = true)
+    @Mapping(target = "vaccines", ignore = true)
+    @Mapping(target = "customer.id", source = "customer.id")
     Animal asEntity(AnimalSaveRequest animalSaveRequest);
+
+    @Mapping(target = "appointments", ignore = true)
+    @Mapping(target = "vaccines", ignore = true)
+    @Mapping(target = "customer.id", source = "customer.id")
     Animal asEntity(AnimalUpdateRequest animalUpdateRequest);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
@@ -27,7 +33,10 @@ public interface AnimalMapper {
     @Mapping(target = "appointments", ignore = true)
     @Mapping(target = "vaccines", ignore = true)
     void updateEntity(Animal source, @MappingTarget Animal target);
+
     AnimalResponse mapToResponse(Animal animal);
+
     AnimalGetVaccinesResponse mapToGetVaccineResponse(Animal animal);
+
     List<AnimalResponse> mapToResponse(List<Animal> animals);
 }

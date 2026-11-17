@@ -23,22 +23,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AnimalController {
     private final AnimalService animalService;
+    private final AnimalMapper animalMapper;
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ResultData<AnimalResponse> save(@Valid @RequestBody AnimalSaveRequest request) {
-        Animal saveAnimal = AnimalMapper.INSTANCE.asEntity(request);
+        Animal saveAnimal = this.animalMapper.asEntity(request);
         this.animalService.save(saveAnimal);
-        AnimalResponse animalResponse = AnimalMapper.INSTANCE.mapToResponse(saveAnimal);
+        AnimalResponse animalResponse = this.animalMapper.mapToResponse(saveAnimal);
         return ResultHelper.created(animalResponse);
     }
 
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
     public ResultData<AnimalResponse> update(@Valid @RequestBody AnimalUpdateRequest request) {
-        Animal updateAnimal = AnimalMapper.INSTANCE.asEntity(request);
+        Animal updateAnimal = this.animalMapper.asEntity(request);
         Animal updatedAnimal = this.animalService.update(updateAnimal);
-        AnimalResponse animalResponse = AnimalMapper.INSTANCE.mapToResponse(updatedAnimal);
+        AnimalResponse animalResponse = this.animalMapper.mapToResponse(updatedAnimal);
         return ResultHelper.success(animalResponse);
     }
 
@@ -56,7 +57,7 @@ public class AnimalController {
         List<Animal> animals = customerId == null
                 ? this.animalService.findAll()
                 : this.animalService.findAnimalsByCustomerId(customerId);
-        List<AnimalResponse> responses = AnimalMapper.INSTANCE.mapToResponse(animals);
+        List<AnimalResponse> responses = this.animalMapper.mapToResponse(animals);
         return ResultHelper.success(responses);
     }
 
@@ -64,21 +65,21 @@ public class AnimalController {
     @ResponseStatus(HttpStatus.OK)
     public ResultData<AnimalResponse> findByName(@RequestParam("name") String name ) {
         Animal animal = this.animalService.findByName(name);
-        AnimalResponse animalResponse = AnimalMapper.INSTANCE.mapToResponse(animal);
+        AnimalResponse animalResponse = this.animalMapper.mapToResponse(animal);
         return ResultHelper.success(animalResponse);
     }
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResultData<AnimalResponse> findById(@PathVariable("id") Long id) {
         Animal animal = this.animalService.getById(id);
-        AnimalResponse animalResponse = AnimalMapper.INSTANCE.mapToResponse(animal);
+        AnimalResponse animalResponse = this.animalMapper.mapToResponse(animal);
         return ResultHelper.success(animalResponse);
     }
 
     @GetMapping("/{id}/vaccines")
     public ResultData<AnimalGetVaccinesResponse>  findVaccinesByAnimalId(@PathVariable("id") Long id) {
         Animal animal = this.animalService.getById(id);
-        AnimalGetVaccinesResponse animalGetVaccinesResponse = AnimalMapper.INSTANCE.mapToGetVaccineResponse(animal);
+        AnimalGetVaccinesResponse animalGetVaccinesResponse = this.animalMapper.mapToGetVaccineResponse(animal);
         return ResultHelper.success(animalGetVaccinesResponse);
     }
 }

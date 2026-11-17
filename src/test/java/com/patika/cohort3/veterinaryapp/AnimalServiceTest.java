@@ -4,6 +4,7 @@ import com.patika.cohort3.veterinaryapp.entity.Animal;
 import com.patika.cohort3.veterinaryapp.entity.Customer;
 import com.patika.cohort3.veterinaryapp.exception.AlreadyExistsException;
 import com.patika.cohort3.veterinaryapp.exception.NotFoundException;
+import com.patika.cohort3.veterinaryapp.mapper.AnimalMapper;
 import com.patika.cohort3.veterinaryapp.repository.AnimalRepository;
 import com.patika.cohort3.veterinaryapp.service.abstracts.CustomerService;
 import com.patika.cohort3.veterinaryapp.service.concretes.AnimalServiceImp;
@@ -11,7 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mapstruct.factory.Mappers;
 
 import java.util.Optional;
 
@@ -28,6 +31,9 @@ public class AnimalServiceTest {
 
     @Mock
     private CustomerService customerService;
+
+    @Spy
+    private AnimalMapper animalMapper = Mappers.getMapper(AnimalMapper.class);
 
     @InjectMocks
     private AnimalServiceImp animalService;

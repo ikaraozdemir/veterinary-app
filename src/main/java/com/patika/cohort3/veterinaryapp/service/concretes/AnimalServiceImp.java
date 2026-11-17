@@ -20,6 +20,7 @@ import java.util.Optional;
 public class AnimalServiceImp implements AnimalService {
     private final AnimalRepository animalRepository;
     private final CustomerService customerService;
+    private final AnimalMapper animalMapper;
 
     @Override
     public Animal save(Animal animal) {
@@ -51,7 +52,7 @@ public class AnimalServiceImp implements AnimalService {
 
         Customer customer = this.customerService.getById(animal.getCustomer().getId());
 
-        AnimalMapper.INSTANCE.updateEntity(animal, existingAnimal);
+        this.animalMapper.updateEntity(animal, existingAnimal);
 
         existingAnimal.setName(normalizedName);
         existingAnimal.setCustomer(customer);
