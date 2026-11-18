@@ -66,7 +66,7 @@ The Veterinary Management System is a REST API developed as part of the Patika+ 
 
 ## Installation
 
-1. Make sure that at least Java 22.0.1 is installed on your system.
+1. Make sure that Java 25 LTS or later is installed on your system.
 ```bash
 java -version
 ```
