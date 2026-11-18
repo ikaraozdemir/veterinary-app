@@ -74,13 +74,16 @@ java -version
 ```bash
    git clone https://github.com/ikaraozdemir/veterinary-app.git
    ```
-3. Follow these steps to import the PostgreSQL backup file located inside the project folder:
-    *  Navigate to the project folder in the terminal.
-    * Import the PostgreSQL backup file:
+3. Create an empty PostgreSQL database named `veterinary`:
    ```bash
-   psql -U username -d database_name -f backup_file.sql
+   createdb -U postgres veterinary
    ```
-4. Before establishing the database connection, update the username and password in database.properties.
+4. Copy `.env.example` to `.env` and fill in your database settings (`DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USERNAME`, `DB_PASSWORD`).
+5. Start the application with the `dev` profile (the default). Hibernate creates the tables on first run:
+   ```bash
+   ./mvnw spring-boot:run
+   ```
+6. Open Swagger UI at http://localhost:8080/swagger-ui/index.html to add sample data.
 
 ## Secreenshots
 * UML Diagram
