@@ -1,7 +1,6 @@
 package com.patika.cohort3.veterinaryapp.controller;
 
 import com.patika.cohort3.veterinaryapp.dto.request.available.date.AvailableDateSaveRequest;
-import com.patika.cohort3.veterinaryapp.dto.request.available.date.AvailableDateUpdateRequest;
 import com.patika.cohort3.veterinaryapp.dto.response.available.date.AvailableDateResponse;
 import com.patika.cohort3.veterinaryapp.entity.AvailableDate;
 
@@ -30,15 +29,6 @@ public class AvailableDateController {
         this.availableDateService.save(saveAvailableDate);
         AvailableDateResponse availableDateResponse = AvailableDateMapper.INSTANCE.mapToResponse(saveAvailableDate);
         return ResultHelper.created(availableDateResponse);
-    }
-
-    @PutMapping()
-    @ResponseStatus(HttpStatus.OK)
-    public ResultData<AvailableDateResponse> update(@Valid @RequestBody AvailableDateUpdateRequest request) {
-        AvailableDate updateAvailableDate = AvailableDateMapper.INSTANCE.asEntity(request);
-        this.availableDateService.update(updateAvailableDate);
-        AvailableDateResponse availableDateResponse = AvailableDateMapper.INSTANCE.mapToResponse(updateAvailableDate);
-        return ResultHelper.success(availableDateResponse);
     }
 
     @DeleteMapping("/{id}")

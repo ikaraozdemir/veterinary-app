@@ -6,7 +6,6 @@ import java.util.List;
 
 public interface AvailableDateService {
      AvailableDate save(AvailableDate availableDate);
-     AvailableDate update(AvailableDate availableDate);
      boolean delete(Long id);
      AvailableDate getById(Long id);
      List<AvailableDate> findAll();

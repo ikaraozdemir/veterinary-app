@@ -49,7 +49,6 @@ The Veterinary Management System is a REST API developed as part of the Patika+ 
 |                                                                    |                 |                                                                                                      |
 | **available_date**                                                 |                 |                                                                                                      |
 | `/v1/available-dates`                                              |       GET       | Retrieves all available dates for doctors                                                            |
-| `/v1/available-dates`                                              |       PUT       | Updates the available date with the given ID                                                         |
 | `/v1/available-dates`                                              |      POST       | Adds a new available date                                                                            |
 | `/v1/available-dates/{id}`                                         |       GET       | Retrieves the available date with the given ID                                                       |
 | `/v1/available-dates/{id}`                                         |     DELETE      | Deletes the available date with the given ID                                                         |
