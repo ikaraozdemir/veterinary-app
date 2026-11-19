@@ -7,13 +7,12 @@ import com.patika.cohort3.veterinaryapp.dto.response.vaccine.VaccineResponse;
 
 import com.patika.cohort3.veterinaryapp.entity.Vaccine;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper
+(componentModel = "spring")
 public interface VaccineMapper {
-    VaccineMapper INSTANCE = Mappers.getMapper(VaccineMapper.class);
     Vaccine asEntity(VaccineSaveRequest vaccineSaveRequest);
     Vaccine asEntity(VaccineUpdateRequest vaccineUpdateRequest);
     VaccineResponse mapToResponse(Vaccine vaccine);

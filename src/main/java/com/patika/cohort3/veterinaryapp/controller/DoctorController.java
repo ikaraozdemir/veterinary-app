@@ -21,24 +21,26 @@ import java.util.List;
 @RequestMapping("/v1/doctors")
 @RequiredArgsConstructor
 public class DoctorController {
+
     private final DoctorService doctorService;
+    private final DoctorMapper doctorMapper;
 
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ResultData<DoctorSaveResponse> save(@Valid @RequestBody DoctorSaveRequest request) {
-        Doctor saveDoctor = DoctorMapper.INSTANCE.asEntity(request);
+        Doctor saveDoctor = this.doctorMapper.asEntity(request);
         this.doctorService.save(saveDoctor);
-        DoctorSaveResponse doctorSaveResponse = DoctorMapper.INSTANCE.mapToSaveResponse(saveDoctor);
+        DoctorSaveResponse doctorSaveResponse = this.doctorMapper.mapToSaveResponse(saveDoctor);
         return ResultHelper.created(doctorSaveResponse);
     }
 
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
     public ResultData<DoctorResponse> update(@RequestBody DoctorUpdateRequest request) {
-        Doctor updateDoctor = DoctorMapper.INSTANCE.asEntity(request);
+        Doctor updateDoctor = this.doctorMapper.asEntity(request);
         this.doctorService.update(updateDoctor);
-        DoctorResponse doctorResponse = DoctorMapper.INSTANCE.mapToResponse(updateDoctor);
+        DoctorResponse doctorResponse = this.doctorMapper.mapToResponse(updateDoctor);
         return ResultHelper.success(doctorResponse);
     }
 
@@ -46,7 +48,7 @@ public class DoctorController {
     @ResponseStatus(HttpStatus.OK)
     public ResultData<List<DoctorResponse>> findAll() {
         List<Doctor> doctors = this.doctorService.findAll();
-        List<DoctorResponse> responses = DoctorMapper.INSTANCE.mapToResponse(doctors);
+        List<DoctorResponse> responses = this.doctorMapper.mapToResponse(doctors);
         return ResultHelper.success(responses);
     }
 
@@ -54,7 +56,7 @@ public class DoctorController {
     @ResponseStatus(HttpStatus.OK)
     public ResultData<DoctorResponse> findById(@PathVariable Long id) {
         Doctor doctor = this.doctorService.getById(id);
-        DoctorResponse response = DoctorMapper.INSTANCE.mapToResponse(doctor);
+        DoctorResponse response = this.doctorMapper.mapToResponse(doctor);
         return ResultHelper.success(response);
     }
 

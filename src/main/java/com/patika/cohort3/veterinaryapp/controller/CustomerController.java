@@ -22,14 +22,16 @@ import java.util.List;
 @RequestMapping("/v1/customers")
 @RequiredArgsConstructor
 public class CustomerController {
+
     private final CustomerService customerService;
+    private final CustomerMapper customerMapper;
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ResultData<CustomerSaveResponse> save(@Valid @RequestBody CustomerSaveRequest request) {
-        Customer saveCustomer = CustomerMapper.INSTANCE.asEntity(request);
+        Customer saveCustomer = this.customerMapper.asEntity(request);
         this.customerService.save(saveCustomer);
-        CustomerSaveResponse customerSaveResponse = CustomerMapper.INSTANCE.mapToSaveResponse(saveCustomer);
+        CustomerSaveResponse customerSaveResponse = this.customerMapper.mapToSaveResponse(saveCustomer);
         return ResultHelper.created(customerSaveResponse);
     }
 
@@ -37,7 +39,7 @@ public class CustomerController {
     @ResponseStatus(HttpStatus.OK)
     public ResultData<List<CustomerResponse>> findAll() {
         List<Customer> customers = this.customerService.findAll();
-        List<CustomerResponse> responses = CustomerMapper.INSTANCE.mapToResponse(customers);
+        List<CustomerResponse> responses = this.customerMapper.mapToResponse(customers);
         return ResultHelper.success(responses);
     }
 
@@ -45,7 +47,7 @@ public class CustomerController {
     @ResponseStatus(HttpStatus.OK)
     public ResultData<CustomerResponse> findByName(@RequestParam("name") String name ) {
         Customer customer = this.customerService.findByName(name);
-        CustomerResponse customerResponse = CustomerMapper.INSTANCE.mapToResponse(customer);
+        CustomerResponse customerResponse = this.customerMapper.mapToResponse(customer);
         return ResultHelper.success(customerResponse);
     }
 
@@ -53,23 +55,23 @@ public class CustomerController {
     @ResponseStatus(HttpStatus.OK)
     public ResultData<CustomerResponse> findById(@PathVariable("id") Long id ) {
         Customer customer = this.customerService.getById(id);
-        CustomerResponse customerResponse = CustomerMapper.INSTANCE.mapToResponse(customer);
+        CustomerResponse customerResponse = this.customerMapper.mapToResponse(customer);
         return ResultHelper.success(customerResponse);
     }
 
     @GetMapping("/{id}/animals")
         public ResultData<CustomerGetAnimalsResponse>  findAnimalsByCustomerId(@PathVariable("id") Long id) {
         Customer customer = this.customerService.getById(id);
-        CustomerGetAnimalsResponse customerGetAnimalsResponse = CustomerMapper.INSTANCE.mapToGetAnimalResponse(customer);
+        CustomerGetAnimalsResponse customerGetAnimalsResponse = this.customerMapper.mapToGetAnimalResponse(customer);
         return ResultHelper.success(customerGetAnimalsResponse);
     }
 
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
     public ResultData<CustomerResponse> update(@Valid @RequestBody CustomerUpdateRequest request) {
-        Customer updateCustomer = CustomerMapper.INSTANCE.asEntity(request);
+        Customer updateCustomer = this.customerMapper.asEntity(request);
         this.customerService.update(updateCustomer);
-        CustomerResponse customerResponse = CustomerMapper.INSTANCE.mapToResponse(updateCustomer);
+        CustomerResponse customerResponse = this.customerMapper.mapToResponse(updateCustomer);
         return ResultHelper.success(customerResponse);
     }
 

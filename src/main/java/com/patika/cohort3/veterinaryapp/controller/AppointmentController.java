@@ -22,23 +22,25 @@ import java.util.List;
 @RequestMapping("/v1/appointments")
 @RequiredArgsConstructor
 public class AppointmentController {
+
     private final AppointmentService appointmentService;
+    private final AppointmentMapper appointmentMapper;
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ResultData<AppointmentResponse> save(@Valid @RequestBody AppointmentSaveRequest request) {
-        Appointment saveAppointment = AppointmentMapper.INSTANCE.asEntity(request);
+        Appointment saveAppointment = this.appointmentMapper.asEntity(request);
         this.appointmentService.save(saveAppointment);
-        AppointmentResponse appointmentResponse = AppointmentMapper.INSTANCE.mapToResponse(saveAppointment);
+        AppointmentResponse appointmentResponse = this.appointmentMapper.mapToResponse(saveAppointment);
         return ResultHelper.created(appointmentResponse);
     }
 
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
     public ResultData<AppointmentResponse> update(@Valid @RequestBody AppointmentUpdateRequest request) {
-        Appointment updateAppointment = AppointmentMapper.INSTANCE.asEntity(request);
+        Appointment updateAppointment = this.appointmentMapper.asEntity(request);
         Appointment updatedAppointment = this.appointmentService.update(updateAppointment);
-        AppointmentResponse appointmentResponse = AppointmentMapper.INSTANCE.mapToResponse(updatedAppointment);
+        AppointmentResponse appointmentResponse = this.appointmentMapper.mapToResponse(updatedAppointment);
         return ResultHelper.success(appointmentResponse);
     }
 
@@ -53,7 +55,7 @@ public class AppointmentController {
     @ResponseStatus(HttpStatus.OK)
     public ResultData<List<AppointmentResponse>> findAll() {
         List<Appointment> appointments = this.appointmentService.findAll();
-        List<AppointmentResponse> responses = AppointmentMapper.INSTANCE.mapToResponse(appointments);
+        List<AppointmentResponse> responses = this.appointmentMapper.mapToResponse(appointments);
         return ResultHelper.success(responses);
     }
 
@@ -61,7 +63,7 @@ public class AppointmentController {
     @ResponseStatus(HttpStatus.OK)
     public ResultData<AppointmentResponse> findById(@PathVariable("id") Long id) {
         Appointment appointment = this.appointmentService.getById(id);
-        AppointmentResponse response = AppointmentMapper.INSTANCE.mapToResponse(appointment);
+        AppointmentResponse response = this.appointmentMapper.mapToResponse(appointment);
         return ResultHelper.success(response);
     }
 
@@ -74,7 +76,7 @@ public class AppointmentController {
             @RequestParam("endDate")
             @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime endDate ) {
         List<Appointment> appointments = appointmentService.getAppointmentsByAppointmentDateBetweenAndDoctorId(doctorId, startDate, endDate);
-        List<AppointmentDateRangeResponse> appointmentDateRangeResponses = AppointmentMapper.INSTANCE.mapToDateRangeResponse(appointments);
+        List<AppointmentDateRangeResponse> appointmentDateRangeResponses = this.appointmentMapper.mapToDateRangeResponse(appointments);
         return ResultHelper.success(appointmentDateRangeResponses);
     }
 
@@ -86,7 +88,7 @@ public class AppointmentController {
             @RequestParam("endDate")
             @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime endDate ) {
         List<Appointment> appointments = appointmentService.getAppointmentsByAppointmentDateBetweenAndAnimalId(animalId, startDate, endDate);
-        List<AppointmentDateRangeResponse> appointmentDateRangeResponses = AppointmentMapper.INSTANCE.mapToDateRangeResponse(appointments);
+        List<AppointmentDateRangeResponse> appointmentDateRangeResponses = this.appointmentMapper.mapToDateRangeResponse(appointments);
         return ResultHelper.success(appointmentDateRangeResponses);
     }
 

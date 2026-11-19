@@ -21,23 +21,25 @@ import java.util.List;
 @RequestMapping("/v1/vaccines")
 @RequiredArgsConstructor
 public class VaccineController {
+
     private final VaccineService vaccineService;
+    private final VaccineMapper vaccineMapper;
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ResultData<VaccineResponse> save(@Valid @RequestBody VaccineSaveRequest request) {
-        Vaccine saveVaccine = VaccineMapper.INSTANCE.asEntity(request);
+        Vaccine saveVaccine = this.vaccineMapper.asEntity(request);
         this.vaccineService.save(saveVaccine);
-        VaccineResponse vaccineResponse = VaccineMapper.INSTANCE.mapToResponse(saveVaccine);
+        VaccineResponse vaccineResponse = this.vaccineMapper.mapToResponse(saveVaccine);
         return ResultHelper.created(vaccineResponse);
     }
 
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
     public ResultData<VaccineResponse> update(@Valid @RequestBody VaccineUpdateRequest request) {
-        Vaccine updateVaccine = VaccineMapper.INSTANCE.asEntity(request);
+        Vaccine updateVaccine = this.vaccineMapper.asEntity(request);
         this.vaccineService.update(updateVaccine);
-        VaccineResponse vaccineResponse = VaccineMapper.INSTANCE.mapToResponse(updateVaccine);
+        VaccineResponse vaccineResponse = this.vaccineMapper.mapToResponse(updateVaccine);
         return ResultHelper.success(vaccineResponse);
     }
 
@@ -53,7 +55,7 @@ public class VaccineController {
     @ResponseStatus(HttpStatus.OK)
     public ResultData<List<VaccineResponse>> findAll() {
         List<Vaccine> vaccines = this.vaccineService.findAll();
-        List<VaccineResponse> responses = VaccineMapper.INSTANCE.mapToResponse(vaccines);
+        List<VaccineResponse> responses = this.vaccineMapper.mapToResponse(vaccines);
         return ResultHelper.success(responses);
     }
 
@@ -61,7 +63,7 @@ public class VaccineController {
     @ResponseStatus(HttpStatus.OK)
     public ResultData<VaccineResponse> findById(@PathVariable("id") Long id) {
         Vaccine vaccine = this.vaccineService.getById(id);
-        VaccineResponse response = VaccineMapper.INSTANCE.mapToResponse(vaccine);
+        VaccineResponse response = this.vaccineMapper.mapToResponse(vaccine);
         return ResultHelper.success(response);
     }
 
@@ -75,11 +77,8 @@ public class VaccineController {
         LocalDate end = LocalDate.parse(endDate, formatter);
 
         List<Vaccine> vaccines = vaccineService.getVaccinesByProtectionFinishDateBetween(start, end);
-        List<VaccineResponse> responses = VaccineMapper.INSTANCE.mapToResponse(vaccines);
+        List<VaccineResponse> responses = this.vaccineMapper.mapToResponse(vaccines);
         return ResultHelper.success(responses);
     }
-
-
-
 
 }

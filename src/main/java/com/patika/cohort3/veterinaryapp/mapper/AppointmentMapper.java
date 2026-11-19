@@ -6,13 +6,12 @@ import com.patika.cohort3.veterinaryapp.dto.response.appointment.AppointmentDate
 import com.patika.cohort3.veterinaryapp.dto.response.appointment.AppointmentResponse;
 import com.patika.cohort3.veterinaryapp.entity.Appointment;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper
+(componentModel = "spring")
 public interface AppointmentMapper {
-    AppointmentMapper INSTANCE = Mappers.getMapper(AppointmentMapper.class);
     Appointment asEntity(AppointmentSaveRequest appointmentSaveRequest);
     Appointment asEntity(AppointmentUpdateRequest appointmentUpdateRequest);
     AppointmentResponse mapToResponse(Appointment appointment);

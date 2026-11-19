@@ -4,13 +4,13 @@ import com.patika.cohort3.veterinaryapp.dto.request.available.date.AvailableDate
 import com.patika.cohort3.veterinaryapp.dto.response.available.date.AvailableDateResponse;
 import com.patika.cohort3.veterinaryapp.entity.AvailableDate;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper
+(componentModel = "spring")
 public interface AvailableDateMapper {
-    AvailableDateMapper INSTANCE = Mappers.getMapper(AvailableDateMapper.class);
+
     AvailableDate asEntity(AvailableDateSaveRequest availableDateSaveRequest);
     AvailableDateResponse mapToResponse(AvailableDate availableDate);
     List<AvailableDateResponse> mapToResponse(List<AvailableDate> availableDates);

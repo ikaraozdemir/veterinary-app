@@ -20,14 +20,16 @@ import java.util.List;
 @RequestMapping("/v1/available-dates")
 @RequiredArgsConstructor
 public class AvailableDateController {
+
     private final AvailableDateService availableDateService;
+    private final AvailableDateMapper availableDateMapper;
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ResultData<AvailableDateResponse> save(@Valid @RequestBody AvailableDateSaveRequest request) {
-        AvailableDate saveAvailableDate = AvailableDateMapper.INSTANCE.asEntity(request);
+        AvailableDate saveAvailableDate = this.availableDateMapper.asEntity(request);
         this.availableDateService.save(saveAvailableDate);
-        AvailableDateResponse availableDateResponse = AvailableDateMapper.INSTANCE.mapToResponse(saveAvailableDate);
+        AvailableDateResponse availableDateResponse = this.availableDateMapper.mapToResponse(saveAvailableDate);
         return ResultHelper.created(availableDateResponse);
     }
 
@@ -42,7 +44,7 @@ public class AvailableDateController {
     @ResponseStatus(HttpStatus.OK)
     public ResultData<List<AvailableDateResponse>> findAll() {
         List<AvailableDate> availableDates = this.availableDateService.findAll();
-        List<AvailableDateResponse> responses = AvailableDateMapper.INSTANCE.mapToResponse(availableDates);
+        List<AvailableDateResponse> responses = this.availableDateMapper.mapToResponse(availableDates);
         return ResultHelper.success(responses);
     }
 
@@ -50,7 +52,7 @@ public class AvailableDateController {
     @ResponseStatus(HttpStatus.OK)
     public ResultData<AvailableDateResponse> findById(@PathVariable("id") Long id) {
         AvailableDate availableDate = this.availableDateService.getById(id);
-        AvailableDateResponse response = AvailableDateMapper.INSTANCE.mapToResponse(availableDate);
+        AvailableDateResponse response = this.availableDateMapper.mapToResponse(availableDate);
         return ResultHelper.success(response);
     }
 
